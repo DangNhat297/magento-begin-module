@@ -1,0 +1,78 @@
+<?php
+/** @var \Begin\Practice\Block\Student\StudentList $block */
+$students = $block->getStudentCollection();
+?>
+<?php if (count($students) > 0): ?>
+    <div class="filter-form">
+        <form action="<?php echo $block->escapeUrl($block->getUrl('*/*/*')) ?>" method="get">
+            <div class="form-row">
+                <label for="entity-id-filter"><?php echo __('Student ID') ?>:</label>
+                <input type="text" id="entity-id-filter" name="student_id" value="<?php echo $block->getRequest()->getParam('student_id') ?>" />
+            </div>
+            <div class="form-row">
+                <label for="name-filter"><?php echo __('Name') ?>:</label>
+                <input type="text" id="name-filter" name="name" value="<?php echo $block->getRequest()->getParam('name') ?>" />
+            </div>
+            <div class="form-row">
+                <label for="gender-filter"><?php echo __('Gender') ?>:</label>
+                <select id="gender-filter" name="gender">
+                    <option value=""><?php echo __('All') ?></option>
+                    <option value="male" <?php if ($block->getRequest()->getParam('gender') == 'male'): ?>selected="selected"<?php endif; ?>><?php echo __('Male') ?></option>
+                    <option value="female" <?php if ($block->getRequest()->getParam('gender') == 'female'): ?>selected="selected"<?php endif; ?>><?php echo __('Female') ?></option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label for="age-from-filter"><?php echo __('Age From') ?>:</label>
+                <input type="text" id="age-from-filter" name="age_from" value="<?php echo $block->getRequest()->getParam('age_from') ?>" />
+            </div>
+            <div class="form-row">
+                <label for="age-to-filter"><?php echo __('Age To') ?>:</label>
+                <input type="text" id="age-to-filter" name="age_to" value="<?php echo $block->getRequest()->getParam('age_to') ?>" />
+            </div>
+            <button type="submit"><?php echo __('Filter') ?></button>
+        </form>
+    </div>
+    <div class="table-wrapper orders-history">
+        <table class="data table table-order-items history" id="my-orders-table">
+            <caption class="table-caption"><?= __('Student List') ?></caption>
+            <thead>
+            <tr>
+                <th scope="col" class="col id"><?= __('ID') ?></th>
+                <th scope="col" class="col name"><?= __('Name') ?></th>
+                <th scope="col" class="col gender"><?= __('Gender') ?></th>
+                <th scope="col" class="col dob"><?= __('Date of Birth') ?></th>
+                <th scope="col" class="col address"><?= __('Address') ?></th>
+                <th scope="col" class="col action"><?= __('Action') ?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($students as $key => $student): ?>
+                <tr>
+                    <td data-th="<?= $block->escapeHtml(__('ID')) ?>" class="col id"><?= $key ?></td>
+                    <td data-th="<?= $block->escapeHtml(__('Name')) ?>" class="col name"><?= $student->getName() ?></td>
+                    <td data-th="<?= $block->escapeHtml(__('Gender')) ?>"
+                        class="col gender"><?= $block->helper->getGender($student->getGender()) ?></td>
+                    <td data-th="<?= $block->escapeHtml(__('Date of Birth')) ?>"
+                        class="col dob"><?= $student->getDob() ?></td>
+                    <td data-th="<?= $block->escapeHtml(__('Address')) ?>"
+                        class="col address"><?= $student->getAddress() ?></td>
+                    <td data-th="<?= $block->escapeHtml(__('Action')) ?>" class="col action">
+                        <a href="<?= $block->getEditAction($student->getId()) ?>"><button>Edit</button></a>
+                        <form action="<?= $block->escapeUrl($block->getDeleteAction()) ?>">
+                            <input type="hidden" name="id" value="<?= $student->getId() ?>">
+                            <button type="submit" title="DELETE" class="action submit">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php if ($block->getPagerHtml()): ?>
+        <div class="order-products-toolbar toolbar bottom"><?php echo $block->getPagerHtml(); ?></div>
+    <?php endif ?>
+<?php else: ?>
+    <div class="message info empty"><span><?= __('No any record.') ?></span></div>
+<?php endif ?>

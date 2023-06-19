@@ -1,0 +1,18 @@
+{
+  "students": {
+    "column": {
+      "id": true,
+      "name": true,
+      "gender": true,
+      "dob": true,
+      "created_at": true,
+      "updated_at": true
+    },
+    "index": {
+      "STUDENTS_ID": true
+    },
+    "constraint": {
+      "PRIMARY": true
+    }
+  }
+}
